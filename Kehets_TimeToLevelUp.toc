@@ -1,0 +1,9 @@
+## Interface: 50500
+## Title: |cFF009900Kehet's|r TimeToLevelUp
+## Notes:
+## Author: Kehet
+## Version: 1.0.0
+## RequiredDeps: Ace3
+## X-Wago-ID: xxx
+
+Kehets_TimeToLevelUp.lua
