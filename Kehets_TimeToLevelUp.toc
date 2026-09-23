@@ -2,7 +2,7 @@
 ## Title: |cFF009900Kehet's|r TimeToLevelUp
 ## Notes:
 ## Author: Kehet
-## Version: 1.0.0
+## Version: @project-version@
 ## RequiredDeps: Ace3
 ## SavedVariables: TimeToLevelUpDB
 ## X-Wago-ID: xxx
