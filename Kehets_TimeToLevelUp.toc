@@ -3,8 +3,9 @@
 ## Notes:
 ## Author: Kehet
 ## Version: @project-version@
-## RequiredDeps: Ace3
+## OptionalDeps: Ace3
 ## SavedVariables: TimeToLevelUpDB
 ## X-Curse-Project-ID: 1711333
 
+embeds.xml
 Kehets_TimeToLevelUp.lua
