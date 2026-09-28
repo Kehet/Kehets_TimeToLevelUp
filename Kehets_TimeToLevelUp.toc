@@ -1,4 +1,4 @@
-## Interface: 50504
+## Interface: 50504, 16001
 ## Title: |cFF009900Kehet's|r TimeToLevelUp
 ## Notes:
 ## Author: Kehet
