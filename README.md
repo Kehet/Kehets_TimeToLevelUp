@@ -32,3 +32,7 @@ Type `/xp` or `/ttl` to print an XP report to chat:
 
 - World of Warcraft: Mists of Pandaria Classic
 - The [Ace3](https://www.curseforge.com/wow/addons/ace3) addon
+
+## License
+
+Public domain (The Unlicense). See `LICENSE`.
