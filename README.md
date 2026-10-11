@@ -28,6 +28,10 @@ Type `/xp` or `/ttl` to print an XP report to chat:
 | `/ttl lock` | Lock the box |
 | `/ttl unlock` | Unlock the box so you can drag it |
 
+## Settings
+
+Open Options > AddOns > Kehet's TimeToLevelUp to turn the login message off, or to choose where it shows.
+
 ## Requirements
 
 - World of Warcraft: Mists of Pandaria Classic
