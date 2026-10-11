@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.0.1...1.1.0) (2026-10-11)
+
+
+### Features
+
+* add a settings page for the login message ([#12](https://github.com/Kehet/Kehets_TimeToLevelUp/issues/12)) ([fb5bf8c](https://github.com/Kehet/Kehets_TimeToLevelUp/commit/fb5bf8c49c5927af98eee38467c02bd2e65ece02))
+
 ## [1.0.1](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.0.0...1.0.1) (2026-09-25)
 
 
