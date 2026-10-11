@@ -1,4 +1,12 @@
-local TimeToLevelUp = LibStub("AceAddon-3.0"):NewAddon("Kehet's TimeToLevelUp", "AceEvent-3.0", "AceConsole-3.0")
+local TimeToLevelUp = LibStub("AceAddon-3.0"):NewAddon("Kehet's TimeToLevelUp", "AceEvent-3.0", "AceConsole-3.0", "LibKehetsVerbosity-1.0")
+
+-- Messages the player can turn off or move in the settings
+TimeToLevelUp:RegisterMessageTypes({
+    banner = {
+        name = "Login message",
+        desc = "The line that says the addon is enabled.",
+    },
+})
 
 -- XP tracking variables
 local xpData = {
@@ -19,6 +27,7 @@ local defaults = {
 
 function TimeToLevelUp:OnInitialize()
     self.db = LibStub("AceDB-3.0"):New("TimeToLevelUpDB", defaults, true)
+    self:RegisterMessagePage()
 
     -- Register slash command
     self:RegisterChatCommand("xp", "ShowXPInfo")
@@ -40,7 +49,7 @@ function TimeToLevelUp:OnEnable()
     -- XP events refresh the box right away; the slow ticker only lets the estimate drift while idle
     C_Timer.NewTicker(60, function() self:UpdateDisplay() end)
 
-    self:Print("Enabled - Use /xp or /ttl to show XP information, /ttl lock or /ttl unlock to lock the box")
+    self:Notify("banner", "Enabled - Use /xp or /ttl to show XP information, /ttl lock or /ttl unlock to lock the box")
 end
 
 function TimeToLevelUp:HandleCommand(input)
