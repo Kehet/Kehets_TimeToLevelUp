@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.0](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.1.0...1.2.0) (2026-10-17)
+
+
+### Features
+
+* support Classic Era (interface 11509) ([#14](https://github.com/Kehet/Kehets_TimeToLevelUp/issues/14)) ([414b0bc](https://github.com/Kehet/Kehets_TimeToLevelUp/commit/414b0bc5080c8d7be5ed6bb3d24bafd2a8e361bc))
+
 ## [1.1.0](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.0.1...1.1.0) (2026-10-11)
 
 
