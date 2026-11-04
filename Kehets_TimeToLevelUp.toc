@@ -6,6 +6,7 @@
 ## OptionalDeps: Ace3, LibKehetsVerbosity-1.0
 ## SavedVariables: TimeToLevelUpDB
 ## X-Curse-Project-ID: 1711333
+## X-Wago-ID: rNkgYzNa
 
 #@non-debug@
 # embeds.xml
