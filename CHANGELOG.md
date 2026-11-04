@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.2.1](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.2.0...1.2.1) (2026-11-04)
+
+
+### Bug Fixes
+
+* upload releases to Wago ([#17](https://github.com/Kehet/Kehets_TimeToLevelUp/issues/17)) ([1732a35](https://github.com/Kehet/Kehets_TimeToLevelUp/commit/1732a3521f0ad84c5f318b91fd7331ffbe10b26a))
+
 ## [1.2.0](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.1.0...1.2.0) (2026-10-17)
 
 
