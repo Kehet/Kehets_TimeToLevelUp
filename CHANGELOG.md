@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.3.0](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.2.1...1.3.0) (2026-11-05)
+
+
+### Features
+
+* load in World of Warcraft: Forever ([#20](https://github.com/Kehet/Kehets_TimeToLevelUp/issues/20)) ([8cf22e7](https://github.com/Kehet/Kehets_TimeToLevelUp/commit/8cf22e74dafc26534462af6f7f356b7a74211042))
+
 ## [1.2.1](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.2.0...1.2.1) (2026-11-04)
 
 
