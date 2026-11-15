@@ -7,9 +7,18 @@ exclude_files = {
     "TitanXP.lua", -- not listed in the .toc
 }
 
+-- Saved variables and slash command registrations
+globals = {
+    "SLASH_KEHETSTTL1",
+    "SLASH_KEHETSTTLXP1",
+    "SlashCmdList",
+    "TimeToLevelUpDB",
+}
+
 -- WoW API, FrameXML and libraries
 read_globals = {
     "C_Timer",
+    "C_XMLUtil",
     "CreateFrame",
     "GetMaxPlayerLevel",
     "GetXPExhaustion",

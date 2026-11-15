@@ -1,4 +1,8 @@
-local TimeToLevelUp = LibStub("AceAddon-3.0"):NewAddon("Kehet's TimeToLevelUp", "AceEvent-3.0", "AceConsole-3.0", "LibKehetsVerbosity-1.0")
+local ADDON_NAME = ...
+
+-- Chat lines start with a short tag, not the full name that the settings page shows
+local TimeToLevelUp = { name = "Kehet's TimeToLevelUp", chatPrefix = "|cFF009900TTL|r: " }
+LibStub("LibKehetsVerbosity-2.0"):Embed(TimeToLevelUp)
 
 -- Messages the player can turn off or move in the settings
 TimeToLevelUp:RegisterMessageTypes({
@@ -19,19 +23,38 @@ local xpData = {
 }
 
 local defaults = {
-    profile = {
-        locked = false,
-        point = { "CENTER", "CENTER", 0, 200 },
-    },
+    locked = false,
+    point = { "CENTER", "CENTER", 0, 200 },
 }
 
+-- Versions up to 1.3.0 saved an AceDB-3.0 database, with the settings in the shared "Default" profile
+local function MigrateAceDB(db)
+    if type(db.profiles) ~= "table" then
+        return db
+    end
+    local profile = type(db.profiles.Default) == "table" and db.profiles.Default or {}
+    return { locked = profile.locked, point = profile.point, verbosity = profile.verbosity }
+end
+
+local function LoadDB()
+    local db = MigrateAceDB(type(TimeToLevelUpDB) == "table" and TimeToLevelUpDB or {})
+    for key, value in pairs(defaults) do
+        if db[key] == nil then
+            db[key] = value
+        end
+    end
+    TimeToLevelUpDB = db
+    return db
+end
+
 function TimeToLevelUp:OnInitialize()
-    self.db = LibStub("AceDB-3.0"):New("TimeToLevelUpDB", defaults, true)
+    self.db = LoadDB()
     self:RegisterMessagePage()
 
-    -- Register slash command
-    self:RegisterChatCommand("xp", "ShowXPInfo")
-    self:RegisterChatCommand("ttl", "HandleCommand")
+    SLASH_KEHETSTTLXP1 = "/xp"
+    SlashCmdList.KEHETSTTLXP = function() self:ShowXPInfo() end
+    SLASH_KEHETSTTL1 = "/ttl"
+    SlashCmdList.KEHETSTTL = function(input) self:HandleCommand(input) end
 end
 
 function TimeToLevelUp:OnEnable()
@@ -41,9 +64,12 @@ function TimeToLevelUp:OnEnable()
     xpData.levelStartXP = UnitXP("player") or 0
 
     -- Register events for XP tracking
-    self:RegisterEvent("PLAYER_XP_UPDATE", "OnXPUpdate")
-    self:RegisterEvent("PLAYER_LEVEL_UP", "OnLevelUp")
-    self:RegisterEvent("CHAT_MSG_COMBAT_XP_GAIN", "OnXPGain")
+    self.events.PLAYER_XP_UPDATE = self.OnXPUpdate
+    self.events.PLAYER_LEVEL_UP = self.OnLevelUp
+    self.events.CHAT_MSG_COMBAT_XP_GAIN = self.OnXPGain
+    for event in pairs(self.events) do
+        self.eventFrame:RegisterEvent(event)
+    end
 
     self:CreateDisplay()
     -- XP events refresh the box right away; the slow ticker only lets the estimate drift while idle
@@ -51,6 +77,32 @@ function TimeToLevelUp:OnEnable()
 
     self:Notify("banner", "Enabled - Use /xp or /ttl to show XP information, /ttl lock or /ttl unlock to lock the box")
 end
+
+-- Handlers are called as handler(self, event, ...), like AceEvent-3.0 did
+TimeToLevelUp.events = {
+    ADDON_LOADED = function(self, event, name)
+        if name == ADDON_NAME then
+            self.eventFrame:UnregisterEvent("ADDON_LOADED")
+            self.events.ADDON_LOADED = nil
+            self:OnInitialize()
+        end
+    end,
+    PLAYER_LOGIN = function(self)
+        self.eventFrame:UnregisterEvent("PLAYER_LOGIN")
+        self.events.PLAYER_LOGIN = nil
+        self:OnEnable()
+    end,
+}
+
+TimeToLevelUp.eventFrame = CreateFrame("Frame")
+TimeToLevelUp.eventFrame:SetScript("OnEvent", function(_, event, ...)
+    local handler = TimeToLevelUp.events[event]
+    if handler then
+        handler(TimeToLevelUp, event, ...)
+    end
+end)
+TimeToLevelUp.eventFrame:RegisterEvent("ADDON_LOADED")
+TimeToLevelUp.eventFrame:RegisterEvent("PLAYER_LOGIN")
 
 function TimeToLevelUp:HandleCommand(input)
     input = strtrim(input or ""):lower()
@@ -66,15 +118,20 @@ function TimeToLevelUp:HandleCommand(input)
 end
 
 function TimeToLevelUp:CreateDisplay()
-    local frame = CreateFrame("Frame", "KehetsTimeToLevelUpFrame", UIParent, "BackdropTemplate")
-    frame:SetSize(120, 24)
-    frame:SetBackdrop({
-        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-        edgeSize = 12,
-        insets = { left = 3, right = 3, top = 3, bottom = 3 },
-    })
-    frame:SetBackdropColor(0, 0, 0, 0.7)
+    -- The game's tooltip frame where the client has it, so the box looks like a tooltip of that client
+    local hasTooltipTemplate = C_XMLUtil ~= nil and C_XMLUtil.GetTemplateInfo ~= nil
+        and C_XMLUtil.GetTemplateInfo("TooltipBackdropTemplate") ~= nil
+    local frame = CreateFrame("Frame", "KehetsTimeToLevelUpFrame", UIParent,
+        hasTooltipTemplate and "TooltipBackdropTemplate" or "BackdropTemplate")
+    if not hasTooltipTemplate then
+        frame:SetBackdrop({
+            bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+            edgeSize = 12,
+            insets = { left = 3, right = 3, top = 3, bottom = 3 },
+        })
+        frame:SetBackdropColor(0, 0, 0, 0.7)
+    end
     frame:SetClampedToScreen(true)
     frame:SetMovable(true)
     frame:RegisterForDrag("LeftButton")
@@ -82,22 +139,22 @@ function TimeToLevelUp:CreateDisplay()
     frame:SetScript("OnDragStop", function(f)
         f:StopMovingOrSizing()
         local point, _, relativePoint, x, y = f:GetPoint()
-        self.db.profile.point = { point, relativePoint, x, y }
+        self.db.point = { point, relativePoint, x, y }
     end)
 
-    local p = self.db.profile.point
+    local p = self.db.point
     frame:SetPoint(p[1], UIParent, p[2], p[3], p[4])
 
-    frame.text = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    frame.text = frame:CreateFontString(nil, "OVERLAY", "SystemFont_Shadow_Med1")
     frame.text:SetPoint("CENTER")
 
     self.frame = frame
-    self:SetLocked(self.db.profile.locked)
+    self:SetLocked(self.db.locked)
     self:UpdateDisplay()
 end
 
 function TimeToLevelUp:SetLocked(locked)
-    self.db.profile.locked = locked
+    self.db.locked = locked
     -- A locked box ignores the mouse, so it can't be dragged and doesn't block clicks
     self.frame:EnableMouse(not locked)
 end
@@ -112,7 +169,7 @@ function TimeToLevelUp:UpdateDisplay()
         text = "TTL: " .. self:FormatShortTime(rate > 0 and needed / rate * 3600 or 0)
     end
     self.frame.text:SetText(text)
-    self.frame:SetWidth(self.frame.text:GetStringWidth() + 20)
+    self.frame:SetSize(self.frame.text:GetStringWidth() + 20, self.frame.text:GetStringHeight() + 12)
 end
 
 -- XP per hour since login or the last level up, whichever is later
