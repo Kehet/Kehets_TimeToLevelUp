@@ -1,6 +1,7 @@
 local ADDON_NAME = ...
 
-local TimeToLevelUp = { name = "Kehet's TimeToLevelUp" }
+-- Chat lines start with a short tag, not the full name that the settings page shows
+local TimeToLevelUp = { name = "Kehet's TimeToLevelUp", chatPrefix = "|cFF009900TTL|r: " }
 LibStub("LibKehetsVerbosity-2.0"):Embed(TimeToLevelUp)
 
 -- Messages the player can turn off or move in the settings
