@@ -18,6 +18,7 @@ globals = {
 -- WoW API, FrameXML and libraries
 read_globals = {
     "C_Timer",
+    "C_XMLUtil",
     "CreateFrame",
     "GetMaxPlayerLevel",
     "GetXPExhaustion",

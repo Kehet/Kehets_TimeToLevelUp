@@ -117,15 +117,20 @@ function TimeToLevelUp:HandleCommand(input)
 end
 
 function TimeToLevelUp:CreateDisplay()
-    local frame = CreateFrame("Frame", "KehetsTimeToLevelUpFrame", UIParent, "BackdropTemplate")
-    frame:SetSize(120, 24)
-    frame:SetBackdrop({
-        bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
-        edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
-        edgeSize = 12,
-        insets = { left = 3, right = 3, top = 3, bottom = 3 },
-    })
-    frame:SetBackdropColor(0, 0, 0, 0.7)
+    -- The game's tooltip frame where the client has it, so the box looks like a tooltip of that client
+    local hasTooltipTemplate = C_XMLUtil ~= nil and C_XMLUtil.GetTemplateInfo ~= nil
+        and C_XMLUtil.GetTemplateInfo("TooltipBackdropTemplate") ~= nil
+    local frame = CreateFrame("Frame", "KehetsTimeToLevelUpFrame", UIParent,
+        hasTooltipTemplate and "TooltipBackdropTemplate" or "BackdropTemplate")
+    if not hasTooltipTemplate then
+        frame:SetBackdrop({
+            bgFile = "Interface\\Tooltips\\UI-Tooltip-Background",
+            edgeFile = "Interface\\Tooltips\\UI-Tooltip-Border",
+            edgeSize = 12,
+            insets = { left = 3, right = 3, top = 3, bottom = 3 },
+        })
+        frame:SetBackdropColor(0, 0, 0, 0.7)
+    end
     frame:SetClampedToScreen(true)
     frame:SetMovable(true)
     frame:RegisterForDrag("LeftButton")
@@ -139,7 +144,7 @@ function TimeToLevelUp:CreateDisplay()
     local p = self.db.point
     frame:SetPoint(p[1], UIParent, p[2], p[3], p[4])
 
-    frame.text = frame:CreateFontString(nil, "OVERLAY", "GameFontHighlightSmall")
+    frame.text = frame:CreateFontString(nil, "OVERLAY", "SystemFont_Shadow_Med1")
     frame.text:SetPoint("CENTER")
 
     self.frame = frame
@@ -163,7 +168,7 @@ function TimeToLevelUp:UpdateDisplay()
         text = "TTL: " .. self:FormatShortTime(rate > 0 and needed / rate * 3600 or 0)
     end
     self.frame.text:SetText(text)
-    self.frame:SetWidth(self.frame.text:GetStringWidth() + 20)
+    self.frame:SetSize(self.frame.text:GetStringWidth() + 20, self.frame.text:GetStringHeight() + 12)
 end
 
 -- XP per hour since login or the last level up, whichever is later
