@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.4.0](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.3.0...1.4.0) (2026-11-15)
+
+
+### Features
+
+* remove the Ace3 dependency ([#22](https://github.com/Kehet/Kehets_TimeToLevelUp/issues/22)) ([bc89b9c](https://github.com/Kehet/Kehets_TimeToLevelUp/commit/bc89b9c2fa4f1d48d0ee2a57cd7ffc797b8a2d45))
+
 ## [1.3.0](https://github.com/Kehet/Kehets_TimeToLevelUp/compare/1.2.1...1.3.0) (2026-11-05)
 
 
