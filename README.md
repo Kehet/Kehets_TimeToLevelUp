@@ -37,7 +37,7 @@ Open Options > AddOns > Kehet's TimeToLevelUp to turn the login message off, or 
 - World of Warcraft: Mists of Pandaria Classic
 - World of Warcraft: Classic Era
 - World of Warcraft: Forever
-- The [Ace3](https://www.curseforge.com/wow/addons/ace3) addon
+- No other addons. The packaged release includes its libraries.
 
 ## License
 
